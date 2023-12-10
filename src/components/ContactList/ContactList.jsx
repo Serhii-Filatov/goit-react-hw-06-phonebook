@@ -1,21 +1,35 @@
-import { ContactListItem } from './ContactListItem/ContactListItem';
+import { ContactListItem } from 'components/ContactListItem/ContactListItem';
+import { useDispatch, useSelector } from 'react-redux';
 
-export const ContactList = ({ contacts, deleteContact }) => {
+import { deleteContact } from '../../redux/contactsReducer';
+
+export const ContactList = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.contacts);
+  const filter = useSelector(state => state.contacts.filter);
+
+  const hanldeDeleteContact = contactId => {
+    dispatch(deleteContact(contactId));
+  };
+
+  const contactsArr = contacts.filter(contact => {
+    return contact.name.toLowerCase().includes(filter.toLowerCase());
+  });
+
   return (
     <ul>
-      {contacts.length ? (
-        contacts.map(({ id, name, number }) => (
+      {contactsArr.map(contact => {
+        const { id, name, number } = contact;
+        return (
           <ContactListItem
-            id={id}
             key={id}
-            name={name}
-            number={number}
-            onDeleteContact={deleteContact}
+            contactId={id}
+            contactName={name}
+            contactNumber={number}
+            deleteContact={hanldeDeleteContact}
           />
-        ))
-      ) : (
-        <p>Contact list is empty</p>
-      )}
+        );
+      })}
     </ul>
   );
 };

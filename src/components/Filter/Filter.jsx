@@ -1,15 +1,22 @@
-import css from 'components/Filter/Filter.module.css';
+import { useDispatch } from 'react-redux';
+import css from './Filter.module.css';
+import { setFilter } from '../../redux/contactsReducer';
 
-export const Filter = ({ filter, onSetFilter }) => {
+export const Filter = () => {
+  const dispatch = useDispatch();
+
+  const handleFilterInputChange = event => {
+    dispatch(setFilter(event.target.value));
+  };
+
   return (
     <div className={css.div}>
-      <h3 className={css.title}>Find contacts by name</h3>
+      <h3 className={css.title}>Fined contacts by name</h3>
       <input
-        className={css.input}
-        name="filter"
+        className={css.filterInput}
+        onChange={handleFilterInputChange}
         type="text"
-        value={filter}
-        onChange={onSetFilter}
+        name="filter"
       />
     </div>
   );
